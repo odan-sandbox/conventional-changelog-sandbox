@@ -19,6 +19,9 @@ jobs:
         with:
           node-version: ${{ steps.nodenv.outputs.node-version }}
           cache: yarn
+      - name: yarn install
+        run: |
+          yarn install --frozen-lockfile
 
       - name: Check title
         run: echo "${{ github.event.pull_request.title }}" | yarn commitlint
