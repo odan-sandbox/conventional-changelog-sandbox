@@ -1,0 +1,24 @@
+name: Check Pull Request Title
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, edited]
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: nodenv/actions/node-version@main
+        id: nodenv
+      - name: Use Node.js ${{ steps.nodenv.outputs.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ steps.nodenv.outputs.node-version }}
+          cache: yarn
+
+      - name: Check title
+        run: echo "${{ github.event.pull_request.title }}" | yarn commitlint
